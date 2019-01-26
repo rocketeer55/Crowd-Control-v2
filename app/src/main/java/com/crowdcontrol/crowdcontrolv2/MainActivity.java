@@ -8,10 +8,12 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 public class MainActivity extends Activity {
+    /** Hold a reference to our GLSurfaceView */
     private GLSurfaceView mGLSurfaceView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         mGLSurfaceView = new GLSurfaceView(this);
