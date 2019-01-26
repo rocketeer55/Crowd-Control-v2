@@ -155,7 +155,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             +   "attribute vec4 a_Position;   \n"        // Per-vertex position information we will pass in.
             +   "attribute vec4 a_Color;      \n"        // Per-vertex color information we will pass in.
 
-            +   "varrying vec4 v_Color;       \n"        // This will be passed into the fragment shader.
+            +   "varying vec4 v_Color;       \n"        // This will be passed into the fragment shader.
 
             +   "void main()                  \n"        // The entry point for our vertex shader.
             +   "{                            \n"
