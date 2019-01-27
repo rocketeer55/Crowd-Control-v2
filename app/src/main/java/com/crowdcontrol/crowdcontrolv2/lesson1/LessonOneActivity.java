@@ -1,4 +1,4 @@
-package com.crowdcontrol.crowdcontrolv2;
+package com.crowdcontrol.crowdcontrolv2.lesson1;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -7,7 +7,7 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-public class MainActivity extends Activity {
+public class LessonOneActivity extends Activity {
     /** Hold a reference to our GLSurfaceView */
     private GLSurfaceView mGLSurfaceView;
 
@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
             mGLSurfaceView.setEGLContextClientVersion(2);
 
             // Set the renderer to our renderer
-            mGLSurfaceView.setRenderer(new GameRenderer());
+            mGLSurfaceView.setRenderer(new LessonOneRenderer());
         }
 
         else {

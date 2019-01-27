@@ -1,4 +1,4 @@
-package com.crowdcontrol.crowdcontrolv2;
+package com.crowdcontrol.crowdcontrolv2.lesson1;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -12,7 +12,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
 
-public class GameRenderer implements GLSurfaceView.Renderer {
+public class LessonOneRenderer implements GLSurfaceView.Renderer {
     /**
      * Store the model matrix. This matrix is used to move models from object space (where each
      * model can be thought of being located at the center of the universe) to world space.
@@ -66,7 +66,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     /**
      * Initialize the model data.
      */
-    public GameRenderer() {
+    public LessonOneRenderer() {
         // Define points for equilateral triangles.
 
         // This triangle is red, green, and blue.
