@@ -24,9 +24,6 @@ import com.crowdcontrol.crowdcontrolv2.common.TextureHelper;
  */
 public class LessonFourRenderer implements GLSurfaceView.Renderer
 {
-    /** Used for debug logs. */
-    private static final String TAG = "LessonFourRenderer";
-
     private final Context mActivityContext;
 
     /**
