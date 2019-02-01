@@ -13,6 +13,7 @@ import com.crowdcontrol.crowdcontrolv2.R;
 import com.crowdcontrol.crowdcontrolv2.lesson1.LessonOneActivity;
 import com.crowdcontrol.crowdcontrolv2.lesson2.LessonTwoActivity;
 import com.crowdcontrol.crowdcontrolv2.lesson3.LessonThreeActivity;
+import com.crowdcontrol.crowdcontrolv2.lesson4.LessonFourActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +62,15 @@ public class TableOfContents extends ListActivity {
             item.put(ITEM_SUBTITLE, getText(R.string.lesson_three_subtitle));
             data.add(item);
             activityMapping.put(i++, LessonThreeActivity.class);
+        }
+
+        {
+            final Map<String, Object> item = new HashMap<String, Object>();
+            item.put(ITEM_IMAGE, R.mipmap.ic_lesson_four);
+            item.put(ITEM_TITLE, getText(R.string.lesson_four));
+            item.put(ITEM_SUBTITLE, getText(R.string.lesson_four_subtitle));
+            data.add(item);
+            activityMapping.put(i++, LessonFourActivity.class);
         }
 
         final SimpleAdapter dataAdapter = new SimpleAdapter(this, data, R.layout.toc_item, new String[] {ITEM_IMAGE, ITEM_TITLE, ITEM_SUBTITLE}, new int[] {R.id.Image, R.id.Title, R.id.SubTitle});
