@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/icon" >
         <activity
             android:name=".GameRenderer.GameActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="Crowd Control Game" >
                 <intent-filter>
                     <action android:name="android.intent.action.MAIN" />
