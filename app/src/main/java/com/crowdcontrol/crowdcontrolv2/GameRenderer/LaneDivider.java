@@ -137,7 +137,7 @@ public class LaneDivider {
         this.height = height;
         this.depth = depth;
 
-        angle = -5;
+        angle = 0;
 
         initBuffers();
     }
@@ -172,8 +172,8 @@ public class LaneDivider {
     public float[] getModelMatrix(float[] modelMatrix) {
         Matrix.setIdentityM(modelMatrix, 0);
         Matrix.scaleM(modelMatrix, 0, ratio, 1, 1);
-        Matrix.translateM(modelMatrix, 0, xPos, yPos, zPos);
         Matrix.rotateM(modelMatrix, 0, angle, 1f, 0f, 0f);
+        Matrix.translateM(modelMatrix, 0, xPos, yPos, zPos);
         Matrix.scaleM(modelMatrix, 0, width, height, depth);
 
         return modelMatrix;

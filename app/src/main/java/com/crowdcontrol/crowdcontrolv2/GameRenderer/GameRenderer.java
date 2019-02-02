@@ -14,6 +14,7 @@ import com.crowdcontrol.crowdcontrolv2.common.ShaderHelper;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -22,6 +23,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private Context mActivityContext;
 
     private LaneDivider[] dividers = new LaneDivider[8];
+    private LinkedList<Note> notes = new LinkedList<>();
 
     /**
      * Store the model matrix. This matrix is used to move models from object space (where each
@@ -61,6 +63,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private float ratio;
 
+    private long lastTime = System.nanoTime();
     /**
      * Initialize the model data.
      */
@@ -75,11 +78,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         dividers[5] = new LaneDivider(3f, 2f, -5f, 0.05f, 5f, 0.05f);
         dividers[6] = new LaneDivider(4.25f, 2f, -5f, 0.05f, 5f, 0.05f);
         dividers[7] = new LaneDivider(5.5f, 2f, -5f, 0.05f, 5f, 0.05f);
+
+        notes.add(new YellowNote(10f, 3f));
     }
 
     protected String getVertexShader()
     {
-        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_vertex_shader);
+        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_vertex_shader_limit);
     }
 
     protected String getFragmentShader()
@@ -89,6 +94,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+
         // Set the background clear color to gray.
         GLES20.glClearColor(0f, 0f, 0f, 0f);
 
@@ -146,20 +152,23 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         final float far = 10.0f;
 
         Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
-
-        System.out.println("This ran");
     }
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-        // Do a complete rotation every 10 seconds.
-        long time = SystemClock.uptimeMillis() % 10000L;
-        float angleInDegrees = (360.0f / 10000.0f) * ((int) time);
+        long time = System.nanoTime();
+        int deltaTime = (int) ((time - lastTime) / 1000000); // In milliseconds
+        lastTime = time;
 
         for (LaneDivider d : dividers) {
             drawDivider(d);
+        }
+
+        for (Note n : notes) {
+            n.updatePosition(deltaTime);
+            drawNote(n);
         }
     }
 
@@ -177,7 +186,34 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                 0, colors);
         GLES20.glEnableVertexAttribArray(mColorHandle);
 
-        System.out.println(ratio);
+        // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
+        // (which currently contains model * view).
+        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+
+        // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
+        // (which now contains model * view * projection).
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+
+        // Pass in the combined matrix.
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
+
+        // Draw the cube.
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    private void drawNote(final Note note) {
+        FloatBuffer positions = note.getPositionFloatBuffer();
+        FloatBuffer colors = note.getColorFloatBuffer();
+        note.setRatio(ratio);
+        mModelMatrix = note.getModelMatrix(mModelMatrix);
+
+        GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
+                0, positions);
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        GLES20.glVertexAttribPointer(mColorHandle, mColorDataSize, GLES20.GL_FLOAT, false,
+                0, colors);
+        GLES20.glEnableVertexAttribArray(mColorHandle);
 
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
