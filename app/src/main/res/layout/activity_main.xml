@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.devadvance.circularseekbar.CircularSeekBar
+        android:id="@+id/circularSeekBar1"
+        android:layout_width="264dp"
+        android:layout_height="229dp"
+        android:layout_marginTop="306dp"
+        app:circle_stroke_width="50dp"
+        app:circle_x_radius="120dp"
+        app:circle_y_radius="120dp"
+        app:end_angle="270"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lock_enabled="false"
+        app:max="360"
+        app:move_outside_circle="true"
+        app:pointer_alpha_ontouch="100"
+        app:pointer_color="#0174DF"
+        app:pointer_halo_color="#880174DF"
+        app:pointer_radius="25dp"
+        app:progress="0"
+        app:start_angle="270"
+        app:use_custom_radii="true" />
+
+    <com.devadvance.circularseekbar.CircularSeekBar
+        android:id="@+id/circularSeekBar"
+        android:layout_width="264dp"
+        android:layout_height="229dp"
+        android:layout_marginTop="306dp"
+        app:circle_stroke_width="50dp"
+        app:circle_x_radius="120dp"
+        app:circle_y_radius="120dp"
+        app:end_angle="270"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lock_enabled="false"
+        app:max="360"
+        app:move_outside_circle="true"
+        app:pointer_alpha_ontouch="100"
+        app:pointer_color="#0174DF"
+        app:pointer_halo_color="#880174DF"
+        app:pointer_radius="25dp"
+        app:progress="0"
+        app:start_angle="270"
+        app:use_custom_radii="true" />
+
+
+</android.support.constraint.ConstraintLayout>
