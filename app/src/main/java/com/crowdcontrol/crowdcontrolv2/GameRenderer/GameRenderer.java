@@ -4,17 +4,14 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
-import android.view.SurfaceView;
 
 import com.crowdcontrol.crowdcontrolv2.R;
 import com.crowdcontrol.crowdcontrolv2.common.RawResourceReader;
 import com.crowdcontrol.crowdcontrolv2.common.ShaderHelper;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -78,8 +75,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         dividers[5] = new LaneDivider(3f, 2f, -5f, 0.05f, 5f, 0.05f);
         dividers[6] = new LaneDivider(4.25f, 2f, -5f, 0.05f, 5f, 0.05f);
         dividers[7] = new LaneDivider(5.5f, 2f, -5f, 0.05f, 5f, 0.05f);
-
-        notes.add(new YellowNote(10f, 3f));
     }
 
     protected String getVertexShader()
@@ -112,6 +107,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         final float upX = 0.0f;
         final float upY = 1.0f;
         final float upZ = 0.0f;
+
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
         // Set the view matrix. This matrix can be said to represent the camera position.
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
@@ -156,6 +155,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
+        // TODO :: Remove this later
+        randomlyGenerate();
+
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         long time = System.nanoTime();
@@ -228,5 +230,32 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         // Draw the cube.
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    private void randomlyGenerate() {
+        Random r = new Random();
+        int i;
+        if ((i = r.nextInt(200)) < 6) {
+            switch(i) {
+                case 0:
+                    notes.add(new LeftYellowNote(35, r.nextInt(2) + 1));
+                    break;
+                case 1:
+                    notes.add(new LeftBlueNote(35, r.nextInt(2) + 1));
+                    break;
+                case 2:
+                    notes.add(new LeftRedNote(35, r.nextInt(2) + 1));
+                    break;
+                case 3:
+                    notes.add(new RightRedNote(35, r.nextInt(2) + 1));
+                    break;
+                case 4:
+                    notes.add(new RightBlueNote(35, r.nextInt(2) + 1));
+                    break;
+                case 5:
+                    notes.add(new RightYellowNote(35, r.nextInt(2) + 1));
+                    break;
+            }
+        }
     }
 }

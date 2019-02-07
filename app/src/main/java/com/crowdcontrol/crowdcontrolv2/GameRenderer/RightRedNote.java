@@ -3,7 +3,7 @@ package com.crowdcontrol.crowdcontrolv2.GameRenderer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class YellowNote extends Note {
+public class RightRedNote extends Note {
     public final static float[] cubePositionData = {
         // In OpenGL counter-clockwise winding is default. This means that when we look at a triangle,
         // if the points are counter-clockwise we are looking at the "front". If not we are looking at
@@ -60,63 +60,63 @@ public class YellowNote extends Note {
     };
 
     public final static float[] cubeColorData = {
-        // Front face (yellow)
-        1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
+            // Front face (blue)
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
 
-        // Right face (yellow)
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
+            // Right face (blue)
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
 
-        // Back face (yellow)
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
+            // Back face (blue)
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
 
-        // Left face (yellow)
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
+            // Left face (blue)
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
 
 
-        // Top face (yellow)
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
-            1f, 1f, 0f, 1f,
+            // Top face (blue)
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
 
-        // Bottom face (yellow)
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f,
-            0f, 0f, 0f, 1f
+            // Bottom face (blue)
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
+            1f, 0f, 0f, 1f,
     };
 
     protected float speed;
 
-    public YellowNote(float speed, float length) {
+    public RightRedNote(float speed, float length) {
         this.speed = speed;
 
-        this.xPos = -4.875f;
-        this.yPos = 6f;
+        this.xPos = 2.375f;
+        this.yPos = 15f;
         this.zPos = -5f;
 
         this.width = 0.5f;
