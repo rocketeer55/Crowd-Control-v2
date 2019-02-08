@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.view.MotionEvent;
 
 import com.crowdcontrol.crowdcontrolv2.R;
 import com.crowdcontrol.crowdcontrolv2.common.RawResourceReader;

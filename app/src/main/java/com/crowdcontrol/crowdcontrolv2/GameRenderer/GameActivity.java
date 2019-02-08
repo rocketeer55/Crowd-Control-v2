@@ -4,20 +4,28 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.crowdcontrol.crowdcontrolv2.lesson1.LessonOneRenderer;
 
 public class GameActivity extends Activity {
     /** Hold a reference to our GLSurfaceView */
-    private GLSurfaceView mGLSurfaceView;
+    private GameGLSurfaceView mGLSurfaceView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mGLSurfaceView = new GLSurfaceView(this);
+        mGLSurfaceView = new GameGLSurfaceView(this);
+
+        WindowManager windowManager = getWindowManager();
+        Point size = new Point();
+        windowManager.getDefaultDisplay().getSize(size);
+
+        mGLSurfaceView.setSize(size.x, size.y);
 
         // Check if the system supports OpenGL ES 2.0.
         final ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
@@ -43,6 +51,8 @@ public class GameActivity extends Activity {
             // Do something here if the device doesn't support OpenGL ES 2.0
             return;
         }
+
+
 
         setContentView(mGLSurfaceView);
     }
