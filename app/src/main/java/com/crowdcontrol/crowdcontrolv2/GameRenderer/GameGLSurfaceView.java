@@ -34,10 +34,18 @@ public class GameGLSurfaceView extends GLSurfaceView {
         this.screenHeight = screenHeight;
     }
 
+    public TurntableController getLeftTurntableController() {
+        return this.leftTurntableController;
+    }
+
+    public TurntableController getRightTurntableController() {
+        return this.rightTurntableController;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         System.out.println("Touch");
-
+        System.out.println(event.getPointerCount());
         for (int i = 0; i < event.getPointerCount(); i++) {
             // Loop through all current pointers (multi-touch)
 
@@ -83,7 +91,7 @@ public class GameGLSurfaceView extends GLSurfaceView {
             }
         }
 
-        return super.onTouchEvent(event);
+        return true;
     }
 
     public void setRenderer(GameRenderer renderer) {

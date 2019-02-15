@@ -4,11 +4,12 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.view.MotionEvent;
 
+import com.crowdcontrol.crowdcontrolv2.Controllers.TurntableController;
 import com.crowdcontrol.crowdcontrolv2.R;
 import com.crowdcontrol.crowdcontrolv2.common.RawResourceReader;
 import com.crowdcontrol.crowdcontrolv2.common.ShaderHelper;
+import com.crowdcontrol.crowdcontrolv2.common.TextureHelper;
 
 import java.nio.FloatBuffer;
 import java.util.LinkedList;
@@ -22,6 +23,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private LaneDivider[] dividers = new LaneDivider[8];
     private LinkedList<Note> notes = new LinkedList<>();
+
+    private TurntableRenderer leftTurntable;
+    private TurntableRenderer rightTurntable;
 
     /**
      * Store the model matrix. This matrix is used to move models from object space (where each
@@ -44,11 +48,22 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     /** This will be used to pass in teh transformation matrix. */
     private int mMVPMatrixHandle;
 
+    private int mTextureUniformHandle;
+
     /** This will be used to pass in model position information. */
     private int mPositionHandle;
 
     /** This will be used to pass in model color information. */
     private int mColorHandle;
+
+    /** This will be used to pass in texture coordinate information. */
+    private int mTextureCoordinateHandle;
+
+    /** This is a handle for the simple program (used for dividers and notes) */
+    private int mSimpleProgramHandle;
+
+    /** This is a handle for the turntable program */
+    private int mTurntableProgramHandle;
 
     /** How many bytes per float. */
     private final int mBytestPerFloat = 4;
@@ -58,6 +73,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     /** Size of the color data in elements. */
     private final int mColorDataSize = 4;
+
+    /** Size of the texture data in elements. */
+    private final int mTextureDataSize = 2;
+
+    private int mTextureDataHandle;
 
     private float ratio;
 
@@ -78,14 +98,32 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         dividers[7] = new LaneDivider(5.5f, 2f, -5f, 0.05f, 5f, 0.05f);
     }
 
-    protected String getVertexShader()
+    public void setLeftTurntable(TurntableController turntable) {
+        this.leftTurntable = new TurntableRenderer(turntable);
+    }
+
+    public void setRightTurntable(TurntableController turntable) {
+        this.rightTurntable = new TurntableRenderer(turntable);
+    }
+
+    protected String getSimpleVertexShader()
     {
         return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_vertex_shader_limit);
     }
 
-    protected String getFragmentShader()
+    protected String getSimpleFragmentShader()
     {
         return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_fragment_shader);
+    }
+
+    protected String getTurntableVertexShader()
+    {
+        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.turntable_vertex_shader);
+    }
+
+    protected String getTurntableFragmentShader()
+    {
+        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.turntable_fragment_shader);
     }
 
     @Override
@@ -116,24 +154,41 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         // Set the view matrix. This matrix can be said to represent the camera position.
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
-        final String vertexShader = getVertexShader();
-        final String fragmentShader = getFragmentShader();
+        // Set up simple program
+        initSimpleProgram();
+
+        // Set up turntable program
+        initTurntableProgram();
+
+    }
+
+    private void initSimpleProgram() {
+        final String vertexShader = getSimpleVertexShader();
+        final String fragmentShader = getSimpleFragmentShader();
 
         // Load in the vertex shader.
         final int vertexShaderHandle = ShaderHelper.compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
         final int fragmentShaderHandle = ShaderHelper.compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
 
         // Create a program object and store the handle to it
-        int programHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
+        mSimpleProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 new String[] {"a_Position",  "a_Color"});
+    }
 
-        // Set program handles. These will later be used to pass in values to the program.
-        mMVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
-        mPositionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-        mColorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+    private void initTurntableProgram() {
+        final String vertexShader = getTurntableVertexShader();
+        final String fragmentShader = getTurntableFragmentShader();
 
-        // Tell OppenGL to use this program when rendering.
-        GLES20.glUseProgram(programHandle);
+        // Load in the vertex shader.
+        final int vertexShaderHandle = ShaderHelper.compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
+        final int fragmentShaderHandle = ShaderHelper.compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
+
+        // Create a program object and store the handle to it
+        mTurntableProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
+               // new String[] {"a_Position",  "a_TexCoordinate"});
+                new String[] {"a_Position"});
+
+        mTextureDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.bumpy_bricks_public_domain);
     }
 
     @Override
@@ -150,6 +205,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         final float top = 1.0f;
         final float near = 1.0f;
         final float far = 10.0f;
+
+        leftTurntable.setRatio(ratio);
+        rightTurntable.setRatio(ratio);
 
         Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
     }
@@ -173,13 +231,22 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             n.updatePosition(deltaTime);
             drawNote(n);
         }
+
+        drawTurntable(leftTurntable);
+        drawTurntable(rightTurntable);
     }
 
     private void drawDivider(final LaneDivider divider) {
+        GLES20.glUseProgram(mSimpleProgramHandle);
+
         FloatBuffer positions = divider.getPositionFloatBuffer();
         FloatBuffer colors = divider.getColorFloatBuffer();
         divider.setRatio(ratio);
         mModelMatrix = divider.getModelMatrix(mModelMatrix);
+
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mSimpleProgramHandle, "u_MVPMatrix");
+        mPositionHandle = GLES20.glGetAttribLocation(mSimpleProgramHandle, "a_Position");
+        mColorHandle = GLES20.glGetAttribLocation(mSimpleProgramHandle, "a_Color");
 
         GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
                 0, positions);
@@ -205,10 +272,16 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     private void drawNote(final Note note) {
+        GLES20.glUseProgram(mSimpleProgramHandle);
+
         FloatBuffer positions = note.getPositionFloatBuffer();
         FloatBuffer colors = note.getColorFloatBuffer();
         note.setRatio(ratio);
         mModelMatrix = note.getModelMatrix(mModelMatrix);
+
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mSimpleProgramHandle, "u_MVPMatrix");
+        mPositionHandle = GLES20.glGetAttribLocation(mSimpleProgramHandle, "a_Position");
+        mColorHandle = GLES20.glGetAttribLocation(mSimpleProgramHandle, "a_Color");
 
         GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
                 0, positions);
@@ -231,6 +304,50 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         // Draw the cube.
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    private void drawTurntable(TurntableRenderer turntable) {
+        GLES20.glUseProgram(mTurntableProgramHandle);
+
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        FloatBuffer positions = turntable.getPositionFloatBuffer();
+        FloatBuffer texcoords = turntable.getTextureFloatBuffer();
+
+        mModelMatrix = turntable.getModelMatrix(mModelMatrix);
+
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mTurntableProgramHandle, "u_MVPMatrix");
+        mTextureUniformHandle = GLES20.glGetUniformLocation(mTurntableProgramHandle, "u_Texture");
+        mPositionHandle = GLES20.glGetAttribLocation(mTurntableProgramHandle, "a_Position");
+        mTextureCoordinateHandle = GLES20.glGetAttribLocation(mTurntableProgramHandle, "a_TexCoordinate");
+
+        GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
+                0, positions);
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureDataSize, GLES20.GL_FLOAT, false,
+                0, texcoords);
+        GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
+
+        // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
+        // (which currently contains model * view).
+        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+
+        // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
+        // (which now contains model * view * projection).
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+
+        // Pass in the combined matrix.
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureDataHandle);
+
+        GLES20.glUniform1i(mTextureUniformHandle, 0);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
     }
 
     private void randomlyGenerate() {

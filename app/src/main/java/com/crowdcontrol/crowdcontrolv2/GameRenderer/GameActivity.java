@@ -44,7 +44,10 @@ public class GameActivity extends Activity {
             mGLSurfaceView.setEGLContextClientVersion(2);
 
             // Set the renderer to our renderer
-            mGLSurfaceView.setRenderer(new GameRenderer(this));
+            GameRenderer g = new GameRenderer(this);
+            g.setLeftTurntable(mGLSurfaceView.getLeftTurntableController());
+            g.setRightTurntable(mGLSurfaceView.getRightTurntableController());
+            mGLSurfaceView.setRenderer(g);
         }
 
         else {
