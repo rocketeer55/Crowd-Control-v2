@@ -54,11 +54,11 @@ public class TurntableRenderer {
     public TurntableRenderer(TurntableController controller) {
         this.controller = controller;
 
-        this.xPos = controller.getxPos() * 7.5f;
+        this.xPos = controller.getxPos() * 7f;
         this.yPos = controller.getyPos() * 8.5f;
         this.zPos = -5f;
 
-        this.radius = 1.5f;
+        this.radius = 2.5f;
 
         this.rotation = 0f;
         this.ratio = 0.0f;
@@ -79,6 +79,7 @@ public class TurntableRenderer {
 
     public void setRatio(float ratio) {
         this.ratio = ratio;
+        this.radius = this.radius * ratio;
     }
 
     public FloatBuffer getPositionFloatBuffer() {

@@ -44,50 +44,118 @@ public class GameGLSurfaceView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        System.out.println("Touch");
-        System.out.println(event.getPointerCount());
-        for (int i = 0; i < event.getPointerCount(); i++) {
-            // Loop through all current pointers (multi-touch)
+        int pointerCount = event.getPointerCount();
+        int action = event.getActionMasked();
+        int actionIndex = event.getActionIndex();
+        int id = event.getPointerId(actionIndex);
 
-            // Get the normalized (between -1 and 1) coordinate of each finger (i)
-            float touchX = (event.getX(i)/screenWidth) * 2f - 1f;
-            float touchY = (event.getY(i)/screenHeight) * 2f - 1f;
+        TurntableController current;
 
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    // This is the start of a touch.
+        switch (action) {
+            case MotionEvent.ACTION_DOWN : {
+                // This is the start of any fingers touching the screen.
 
-                    // Check if its below the vertical threshold
+                float touchX = ((event.getX(actionIndex)/screenWidth) * 2f - 1f);
+                float touchY = ((event.getY(actionIndex)/screenHeight) * 2f - 1f);
 
-                    // Check if its on left half or right half of screen, get the controller
+                // Check if its below the vertical threshold
+                if (touchY < 0) {
+                    return false;
+                }
+                // Check if its on left half or right half of screen, get the controller
+                if (touchX < 0) {
+                    current = leftTurntableController;
+                }
+                else {
+                    current = rightTurntableController;
+                }
+                // Set startTouchX and startTouchY for that controller
+                current.setStartTouchX(touchX);
+                current.setStartTouchY(touchY);
 
-                    // Make sure controller isn't already being touched
+                // Set that the controller is being touched
+                current.setBeingTouched(true);
 
-                    // Set startTouchX and startTouchY for that controller
+                // Assign the finger's pointerID to the controller
+                current.setPointerId(id);
+                break;
+            }
+            case MotionEvent.ACTION_POINTER_DOWN : {
+                // This is the start of another finger touching the screen.
 
-                    // Set that the controller is being touched
+                float touchX = ((event.getX(actionIndex)/screenWidth) * 2f - 1f);
+                float touchY = ((event.getY(actionIndex)/screenHeight) * 2f - 1f);
 
-                    // Assign the finger's pointerID to the controller
-                    break;
+                // Check if its below the vertical threshold
+                if (touchY < 0) {
+                    return false;
+                }
+                // Check if its on left half or right half of screen, get the controller
+                if (touchX < 0) {
+                    current = leftTurntableController;
+                }
+                else {
+                    current = rightTurntableController;
+                }
+                // Check if the controller is already being touched
+                if (current.isBeingTouched()) {
+                    return false;
+                }
 
-                case MotionEvent.ACTION_MOVE:
-                    // This is the continuation of a touch.
+                // Set startTouchX and startTouchY for that controller
+                current.setStartTouchX(touchX);
+                current.setStartTouchY(touchY);
 
-                    // Check which turntable the pointerID belongs to
+                // Set that the controller is being touched
+                current.setBeingTouched(true);
 
-                    // Set the new angle of the turntable
-                    break;
-                case MotionEvent.ACTION_UP:
-                    // The finger has let go
+                // Assign the finger's pointerID to the controller
+                current.setPointerId(id);
+                break;
+            }
+            case MotionEvent.ACTION_UP :
+            case MotionEvent.ACTION_POINTER_UP : {
+                // Check which controller contains this id
+                if (leftTurntableController.isBeingTouched() && leftTurntableController.getPointerId() == id) {
+                    current = leftTurntableController;
+                }
+                else if (rightTurntableController.isBeingTouched() && rightTurntableController.getPointerId() == id) {
+                    current = rightTurntableController;
+                }
+                else {
+                    return false;
+                }
 
-                    // Check which turntable the pointerID belongs to
+                // Set it to not being touched
+                current.setBeingTouched(false);
 
-                    // Unset the StartTouchX and StartTouchY
+                // Set the pointer id to -1
+                current.setPointerId(-1);
 
-                    // Set that the controller is not being touched
+                break;
+            }
+            case MotionEvent.ACTION_MOVE : {
+                for (int i = 0; i < pointerCount; i++) {
+                    // Get action index of this pointer
+                    int index = event.findPointerIndex(i);
 
-                    // Unset the controller's pointerID
-                    break;
+                    // See which controller this pointer is assigned to
+                    if (leftTurntableController.isBeingTouched() && leftTurntableController.getPointerId() == i) {
+                        current = leftTurntableController;
+                    }
+                    else if (rightTurntableController.isBeingTouched() && rightTurntableController.getPointerId() == i) {
+                        current = rightTurntableController;
+                    }
+                    else {continue;}
+
+                    float touchX = ((event.getX(index)/screenWidth) * 2f - 1f);
+                    float touchY = ((event.getY(index)/screenHeight) * 2f - 1f);
+
+                    // TODO :: Calculate angle
+                    float angle = 0.f;
+
+                    current.setCurrentAngle(angle);
+                }
             }
         }
 

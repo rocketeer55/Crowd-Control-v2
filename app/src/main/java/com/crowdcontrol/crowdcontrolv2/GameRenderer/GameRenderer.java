@@ -232,6 +232,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             drawNote(n);
         }
 
+        leftTurntable.update();
+        rightTurntable.update();
+
         drawTurntable(leftTurntable);
         drawTurntable(rightTurntable);
     }

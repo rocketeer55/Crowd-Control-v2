@@ -14,7 +14,7 @@ public class TurntableController {
     private float startTouchX;
     private float startTouchY;
 
-    private int pointerId;
+    private int pointerId = -1;
 
     public TurntableController(float xPos, float yPos) {
         this.xPos = xPos;
