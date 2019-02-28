@@ -2,6 +2,7 @@ package com.crowdcontrol.crowdcontrolv2.GameRenderer;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -25,8 +26,8 @@ public class GameGLSurfaceView extends GLSurfaceView {
     public GameGLSurfaceView(Context context) {
         super(context);
 
-        leftTurntableController = new TurntableController(-0.5f, -0.5f);
-        rightTurntableController = new TurntableController(0.5f, -0.5f);
+        leftTurntableController = new TurntableController(-0.5f, -0.65f);
+        rightTurntableController = new TurntableController(0.5f, -0.65f);
     }
 
     public void setSize(int screenWidth, int screenHeight) {
@@ -56,10 +57,10 @@ public class GameGLSurfaceView extends GLSurfaceView {
                 // This is the start of any fingers touching the screen.
 
                 float touchX = ((event.getX(actionIndex)/screenWidth) * 2f - 1f);
-                float touchY = ((event.getY(actionIndex)/screenHeight) * 2f - 1f);
+                float touchY = -1.f * ((event.getY(actionIndex)/screenHeight) * 2f - 1f);
 
                 // Check if its below the vertical threshold
-                if (touchY < 0) {
+                if (touchY > 0) {
                     return false;
                 }
                 // Check if its on left half or right half of screen, get the controller
@@ -69,9 +70,12 @@ public class GameGLSurfaceView extends GLSurfaceView {
                 else {
                     current = rightTurntableController;
                 }
-                // Set startTouchX and startTouchY for that controller
-                current.setStartTouchX(touchX);
-                current.setStartTouchY(touchY);
+                // Set starting vector of controller
+                PointF startingVector = new PointF(touchX - current.getxPos(), touchY - current.getyPos());
+                startingVector.x *= (screenWidth / 2.f);
+                startingVector.y *= (screenHeight / 2.f);
+                PointF normalizedVector = normalizeVector(startingVector);
+                current.setStartVector(normalizedVector);
 
                 // Set that the controller is being touched
                 current.setBeingTouched(true);
@@ -84,10 +88,10 @@ public class GameGLSurfaceView extends GLSurfaceView {
                 // This is the start of another finger touching the screen.
 
                 float touchX = ((event.getX(actionIndex)/screenWidth) * 2f - 1f);
-                float touchY = ((event.getY(actionIndex)/screenHeight) * 2f - 1f);
+                float touchY = -1.f * ((event.getY(actionIndex)/screenHeight) * 2f - 1f);
 
                 // Check if its below the vertical threshold
-                if (touchY < 0) {
+                if (touchY > 0) {
                     return false;
                 }
                 // Check if its on left half or right half of screen, get the controller
@@ -103,8 +107,10 @@ public class GameGLSurfaceView extends GLSurfaceView {
                 }
 
                 // Set startTouchX and startTouchY for that controller
-                current.setStartTouchX(touchX);
-                current.setStartTouchY(touchY);
+                PointF startingVector = new PointF(touchX - current.getxPos(), touchY - current.getyPos());
+                startingVector.x *= (screenWidth / 2.f);
+                startingVector.y *= (screenHeight / 2.f);
+                current.setStartVector(normalizeVector(startingVector));
 
                 // Set that the controller is being touched
                 current.setBeingTouched(true);
@@ -149,12 +155,13 @@ public class GameGLSurfaceView extends GLSurfaceView {
                     else {continue;}
 
                     float touchX = ((event.getX(index)/screenWidth) * 2f - 1f);
-                    float touchY = ((event.getY(index)/screenHeight) * 2f - 1f);
+                    float touchY = -1.f * ((event.getY(index)/screenHeight) * 2f - 1f);
 
-                    // TODO :: Calculate angle
-                    float angle = 0.f;
-
-                    current.setCurrentAngle(angle);
+                    PointF currentVector = new PointF(touchX - current.getxPos(), touchY - current.getyPos());
+                    currentVector.x *= (screenWidth / 2.f);
+                    currentVector.y *= (screenHeight / 2.f);
+                    PointF normalizedVector = normalizeVector(currentVector);
+                    current.updateAngle(normalizedVector);
                 }
             }
         }
@@ -165,5 +172,16 @@ public class GameGLSurfaceView extends GLSurfaceView {
     public void setRenderer(GameRenderer renderer) {
         mRenderer = renderer;
         super.setRenderer(renderer);
+    }
+
+    private PointF normalizeVector(PointF vector) {
+        double length = Math.sqrt (vector.x * vector.x + vector.y * vector.y);
+        float newX = 0.f;
+        float newY = 0.f;
+        if (length > 0) {
+            newX = vector.x / (float)length;
+            newY = vector.y / (float)length;
+        }
+        return new PointF(newX, newY);
     }
 }

@@ -185,10 +185,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         // Create a program object and store the handle to it
         mTurntableProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
-               // new String[] {"a_Position",  "a_TexCoordinate"});
-                new String[] {"a_Position"});
+               new String[] {"a_Position",  "a_TexCoordinate"});
 
-        mTextureDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.bumpy_bricks_public_domain);
+        mTextureDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.vinyl);
     }
 
     @Override

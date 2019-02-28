@@ -43,19 +43,26 @@ public class TurntableRenderer {
 
    public final static float[] squareTextureCoordinateData = {
            // Front face
-           -1.0f, -1.0f,
-           -1.0f, 1.0f,
-           1.0f, -1.0f,
-           -1.0f, 1.0f,
+           //-1.0f, -1.0f,
+           //-1.0f, 1.0f,
+           //1.0f, -1.0f,
+           //-1.0f, 1.0f,
+           //1.0f, 1.0f,
+           //1.0f, -1.0f
+
+           0.0f, 0.0f,
+           0.0f, 1.0f,
+           1.0f, 0.0f,
+           0.0f, 1.0f,
            1.0f, 1.0f,
-           1.0f, -1.0f
+           1.0f, 0.0f
    };
 
     public TurntableRenderer(TurntableController controller) {
         this.controller = controller;
 
-        this.xPos = controller.getxPos() * 7f;
-        this.yPos = controller.getyPos() * 8.5f;
+        this.xPos = controller.getxPos() * 6.5f;
+        this.yPos = controller.getyPos() * 6.3f;
         this.zPos = -5f;
 
         this.radius = 2.5f;

@@ -1,5 +1,7 @@
 package com.crowdcontrol.crowdcontrolv2.Controllers;
 
+import android.graphics.PointF;
+
 public class TurntableController {
 
     /** Boolean representing if the turntable is being touched currently */
@@ -8,33 +10,17 @@ public class TurntableController {
     /** Float representing the angle the turntable is currently at (relative to starting position) */
     private float currentAngle;
 
+    // Coordinates of center of circle
     private float xPos;
     private float yPos;
 
-    private float startTouchX;
-    private float startTouchY;
+    private float startAngle;
 
     private int pointerId = -1;
 
     public TurntableController(float xPos, float yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
-    }
-
-    public void setBeingTouched(boolean isBeingTouched) {
-        this.isBeingTouched = isBeingTouched;
-    }
-
-    public boolean isBeingTouched() {
-        return this.isBeingTouched;
-    }
-
-    public void setCurrentAngle(float currentAngle) {
-        this.currentAngle = currentAngle;
-    }
-
-    public float getCurrentAngle() {
-        return this.currentAngle;
     }
 
     public float getxPos() {
@@ -45,6 +31,18 @@ public class TurntableController {
         return this.yPos;
     }
 
+    public void setBeingTouched(boolean isBeingTouched) {
+        this.isBeingTouched = isBeingTouched;
+    }
+
+    public boolean isBeingTouched() {
+        return this.isBeingTouched;
+    }
+
+    public float getCurrentAngle() {
+        return this.currentAngle;
+    }
+
     public void setPointerId(int pointerId) {
         this.pointerId = pointerId;
     }
@@ -53,20 +51,14 @@ public class TurntableController {
         return this.pointerId;
     }
 
-    public float getStartTouchX() {
-        return startTouchX;
+    public void setStartVector (PointF startVector) {
+        this.startAngle = (float) Math.atan2(startVector.y, startVector.x);
     }
 
-    public void setStartTouchX(float startTouchX) {
-        this.startTouchX = startTouchX;
-    }
-
-    public float getStartTouchY() {
-        return startTouchY;
-    }
-
-    public void setStartTouchY(float startTouchY) {
-        this.startTouchY = startTouchY;
+    public void updateAngle(PointF currentVector) {
+        float currAngle = (float) Math.atan2(currentVector.y, currentVector.x);
+        float angle = currAngle - startAngle;
+        currentAngle = (angle * 180.f / (float) Math.PI);
     }
 
 }
