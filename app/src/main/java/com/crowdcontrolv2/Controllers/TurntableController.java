@@ -16,6 +16,8 @@ public class TurntableController {
 
     private float startAngle;
 
+    private float lastAngle = 0.f;
+
     private int pointerId = -1;
 
     public TurntableController(float xPos, float yPos) {
@@ -51,6 +53,10 @@ public class TurntableController {
         return this.pointerId;
     }
 
+    public void setLastAngle() {
+        lastAngle = currentAngle;
+    }
+
     public void setStartVector (PointF startVector) {
         this.startAngle = (float) Math.atan2(startVector.y, startVector.x);
     }
@@ -58,7 +64,11 @@ public class TurntableController {
     public void updateAngle(PointF currentVector) {
         float currAngle = (float) Math.atan2(currentVector.y, currentVector.x);
         float angle = currAngle - startAngle;
-        currentAngle = (angle * 180.f / (float) Math.PI);
+        currentAngle = addLastAngle((angle * 180.f / (float) Math.PI));
+    }
+
+    private float addLastAngle(float angle) {
+        return ((angle + lastAngle) % 360.f);
     }
 
 }

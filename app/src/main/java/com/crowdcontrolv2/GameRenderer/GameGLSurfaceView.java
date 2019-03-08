@@ -132,6 +132,7 @@ public class GameGLSurfaceView extends GLSurfaceView {
                     return false;
                 }
 
+                current.setLastAngle();
                 // Set it to not being touched
                 current.setBeingTouched(false);
 
