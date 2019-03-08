@@ -42,7 +42,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.crowdcontrol.crowdcontrolv2.R;
+import com.crowdcontrolv2.R;
 
 public class CircularSeekBar extends View {
 
