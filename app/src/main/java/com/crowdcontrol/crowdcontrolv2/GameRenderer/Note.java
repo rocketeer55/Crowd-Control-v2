@@ -4,7 +4,15 @@ import android.opengl.Matrix;
 
 import java.nio.FloatBuffer;
 
+import MusicHandler.BeatMap;
+
 public abstract class Note {
+
+    public enum POSITION
+    {
+        LEFT_BLUE, RIGHT_BLUE, LEFT_YELLOW, RIGHT_YELLOW, LEFT_RED, RIGHT_RED
+    }
+
     protected FloatBuffer cubePositions;
     protected FloatBuffer cubeColors;
 
@@ -22,6 +30,10 @@ public abstract class Note {
     protected float ratio;
 
     protected float speed;
+
+    //Brad Stuff
+    public int measure;
+    public BeatMap.NOTE_LENGTH noteLength;
 
     public FloatBuffer getPositionFloatBuffer() {
         return cubePositions;
