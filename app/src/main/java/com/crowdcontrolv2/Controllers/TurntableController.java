@@ -4,6 +4,10 @@ import android.graphics.PointF;
 
 public class TurntableController {
 
+    public enum Direction {
+        LEFT, CENTER, RIGHT;
+    }
+
     /** Boolean representing if the turntable is being touched currently */
     private boolean isBeingTouched;
 
@@ -66,6 +70,24 @@ public class TurntableController {
         this.startAngle = (float) Math.atan2(startVector.y, startVector.x);
     }
 
+    public float getAngularVelocity() {
+        return angularVelocity;
+    }
+
+    public Direction getDirection() {
+        // Check if the controller isBeingTouched first!
+
+        if (angularVelocity > 50f) {
+            return Direction.LEFT;
+        }
+        else if (angularVelocity < -50f) {
+            return Direction.RIGHT;
+        }
+        else {
+            return Direction.CENTER;
+        }
+    }
+
     public void updateAngle(PointF currentVector) {
         float currAngle = (float) Math.atan2(currentVector.y, currentVector.x);
         float angle = currAngle - startAngle;
@@ -93,6 +115,6 @@ public class TurntableController {
         }
 
         angularVelocity = (float) ((double)deltaAngle / deltaTimeInSeconds);
-        System.out.println(angularVelocity);
+        System.out.println(getDirection());
     }
 }
