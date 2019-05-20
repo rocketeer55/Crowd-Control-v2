@@ -3,7 +3,7 @@ package MusicHandler;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.crowdcontrol.crowdcontrolv2.GameRenderer.Note;
+import com.crowdcontrolv2.GameRenderer.Note;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -23,11 +23,11 @@ public class BeatMap
 
     private static class Node
     {
-        public com.crowdcontrol.crowdcontrolv2.GameRenderer.Note note;
+        public com.crowdcontrolv2.GameRenderer.Note note;
         public Node next;
         public int val;
 
-        public Node(com.crowdcontrol.crowdcontrolv2.GameRenderer.Note note)
+        public Node(com.crowdcontrolv2.GameRenderer.Note note)
         {
             this.note = note;
         }
@@ -118,25 +118,25 @@ public class BeatMap
         return returnVal;
     }
 
-    com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION stringToNotePos(String string)
+    com.crowdcontrolv2.GameRenderer.Note.POSITION stringToNotePos(String string)
     {
         Note.POSITION returnVal;
 
         switch(string)
         {
-            case "LEFT_BLUE": returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_BLUE;
+            case "LEFT_BLUE": returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_BLUE;
                 break;
-            case "RIGHT_BLUE": returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.RIGHT_BLUE;
+            case "RIGHT_BLUE": returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.RIGHT_BLUE;
                 break;
-            case "LEFT_YELLOW": returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_YELLOW;
+            case "LEFT_YELLOW": returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_YELLOW;
                 break;
-            case "RIGHT_YELLOW": returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.RIGHT_YELLOW;
+            case "RIGHT_YELLOW": returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.RIGHT_YELLOW;
                 break;
-            case "LEFT_RED": returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_RED;
+            case "LEFT_RED": returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_RED;
                 break;
-            case "RIGHT_RED": returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_RED;
+            case "RIGHT_RED": returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_RED;
                 break;
-            default: returnVal = com.crowdcontrol.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_RED;
+            default: returnVal = com.crowdcontrolv2.GameRenderer.Note.POSITION.LEFT_RED;
                 break;
         }
 
@@ -148,19 +148,19 @@ public class BeatMap
         Note returnVal;
         switch(pos)
         {
-            case LEFT_BLUE: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.LeftBlueNote(35, 2);
+            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, 2);
                 break;
-            case RIGHT_BLUE: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.RightBlueNote(35, 2);
+            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(35, 2);
                 break;
-            case LEFT_YELLOW: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.LeftYellowNote(35, 2);
+            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(35, 2);
                 break;
-            case RIGHT_YELLOW: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.RightYellowNote(35, 2);
+            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(35, 2);
                 break;
-            case LEFT_RED: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.LeftRedNote(35, 2);
+            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(35, 2);
                 break;
-            case RIGHT_RED: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.RightRedNote(35, 2);
+            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(35, 2);
                 break;
-            default: returnVal = new com.crowdcontrol.crowdcontrolv2.GameRenderer.LeftBlueNote(35, 2);
+            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, 2);
                 break;
         }
 

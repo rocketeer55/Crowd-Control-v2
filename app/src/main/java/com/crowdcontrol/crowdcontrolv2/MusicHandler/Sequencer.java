@@ -21,11 +21,11 @@ public class Sequencer
 
     public BeatMap beatMap;
     public float triggerTime;
-    public com.crowdcontrol.crowdcontrolv2.GameRenderer.Note currentNote;
+    public com.crowdcontrolv2.GameRenderer.Note currentNote;
 
     //com.crowdcontrol.crowdcontrolv2.GameRenderer.GameGLSurfaceView playLevel;
 
-    com.crowdcontrol.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer;
+    com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer;
 
     public Sequencer(BeatMap beatMap) {
         this.beatMap = beatMap;
@@ -34,7 +34,7 @@ public class Sequencer
         offset = beatMap.offset * 1000;
     }
 
-    public Sequencer(BeatMap beatMap, com.crowdcontrol.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer)
+    public Sequencer(BeatMap beatMap, com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer)
     {
         this.gameRenderer = gameRenderer;
         this.beatMap = beatMap;

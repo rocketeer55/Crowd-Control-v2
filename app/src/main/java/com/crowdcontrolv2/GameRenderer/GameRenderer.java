@@ -382,7 +382,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    public void addNote(com.crowdcontrol.crowdcontrolv2.GameRenderer.Note n)
+    public void addNote(com.crowdcontrolv2.GameRenderer.Note n)
     {
         notes.add(n);
     }

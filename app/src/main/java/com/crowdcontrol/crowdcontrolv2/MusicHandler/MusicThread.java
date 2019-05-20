@@ -9,10 +9,10 @@ public class MusicThread implements Runnable
     private Sequencer sequencer;
     private Thread thread;
     private boolean running = false;
-    private com.crowdcontrol.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer;
+    private com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer;
 
     public MusicThread(int songID, BeatMap beatMap,
-                       com.crowdcontrol.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer,
+                       com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer,
                        Context context)
     {
         createMusicPlayer(context, songID);
