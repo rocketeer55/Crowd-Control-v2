@@ -82,6 +82,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private float ratio;
 
     private long lastTime = System.nanoTime();
+
+    private float songPos;
+
     /**
      * Initialize the model data.
      */
@@ -377,5 +380,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                     break;
             }
         }
+    }
+
+    public void addNote(com.crowdcontrol.crowdcontrolv2.GameRenderer.Note n)
+    {
+        notes.add(n);
+    }
+
+    public void setSongPos(float pos)
+    {
+        this.songPos = pos;
     }
 }
