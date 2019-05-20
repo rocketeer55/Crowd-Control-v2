@@ -10,6 +10,9 @@ public class TurntableController {
     /** Float representing the angle the turntable is currently at (relative to starting position) */
     private float currentAngle;
 
+    /** Float representing the angular velocity of the turntable in degrees per second */
+    private float angularVelocity;
+
     // Coordinates of center of circle
     private float xPos;
     private float yPos;
@@ -17,6 +20,8 @@ public class TurntableController {
     private float startAngle;
 
     private float lastAngle = 0.f;
+
+    private long lastTime = System.nanoTime();
 
     private int pointerId = -1;
 
@@ -64,11 +69,30 @@ public class TurntableController {
     public void updateAngle(PointF currentVector) {
         float currAngle = (float) Math.atan2(currentVector.y, currentVector.x);
         float angle = currAngle - startAngle;
-        currentAngle = addLastAngle((angle * 180.f / (float) Math.PI));
+        float nextAngle = addLastAngle((angle * 180.f / (float) Math.PI));
+        calculateAngularVelocity(nextAngle);
+        currentAngle = nextAngle;
     }
 
     private float addLastAngle(float angle) {
         return ((angle + lastAngle) % 360.f);
     }
 
+    private void calculateAngularVelocity(float nextAngle) {
+        long currentTime = System.nanoTime();
+        long deltaTime = currentTime - lastTime;
+        double deltaTimeInSeconds = (double) deltaTime / 1_000_000_000;
+        lastTime = currentTime;
+
+        float deltaAngle = nextAngle - currentAngle;
+
+        if (deltaAngle < -180.f) {
+            deltaAngle += 360.f;
+        } else if (deltaAngle > 180.f) {
+            deltaAngle += -360.f;
+        }
+
+        angularVelocity = (float) ((double)deltaAngle / deltaTimeInSeconds);
+        System.out.println(angularVelocity);
+    }
 }

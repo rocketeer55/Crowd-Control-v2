@@ -142,21 +142,28 @@ public class GameGLSurfaceView extends GLSurfaceView {
                 break;
             }
             case MotionEvent.ACTION_MOVE : {
-                for (int i = 0; i < pointerCount; i++) {
-                    // Get action index of this pointer
-                    int index = event.findPointerIndex(i);
+                // Check movement for left controller
+                int leftTurntableIndex = event.findPointerIndex(leftTurntableController.getPointerId());
+                int rightTurntableIndex = event.findPointerIndex(rightTurntableController.getPointerId());
 
-                    // See which controller this pointer is assigned to
-                    if (leftTurntableController.isBeingTouched() && leftTurntableController.getPointerId() == i) {
-                        current = leftTurntableController;
-                    }
-                    else if (rightTurntableController.isBeingTouched() && rightTurntableController.getPointerId() == i) {
-                        current = rightTurntableController;
-                    }
-                    else {continue;}
+                if (leftTurntableIndex >= 0 && leftTurntableController.isBeingTouched()) {
+                    current = leftTurntableController;
 
-                    float touchX = ((event.getX(index)/screenWidth) * 2f - 1f);
-                    float touchY = -1.f * ((event.getY(index)/screenHeight) * 2f - 1f);
+                    float touchX = ((event.getX(leftTurntableIndex)/screenWidth) * 2f - 1f);
+                    float touchY = -1.f * ((event.getY(leftTurntableIndex)/screenHeight) * 2f - 1f);
+
+                    PointF currentVector = new PointF(touchX - current.getxPos(), touchY - current.getyPos());
+                    currentVector.x *= (screenWidth / 2.f);
+                    currentVector.y *= (screenHeight / 2.f);
+                    PointF normalizedVector = normalizeVector(currentVector);
+                    current.updateAngle(normalizedVector);
+                }
+
+                if (rightTurntableIndex >= 0 && rightTurntableController.isBeingTouched()) {
+                    current = rightTurntableController;
+
+                    float touchX = ((event.getX(rightTurntableIndex)/screenWidth) * 2f - 1f);
+                    float touchY = -1.f * ((event.getY(rightTurntableIndex)/screenHeight) * 2f - 1f);
 
                     PointF currentVector = new PointF(touchX - current.getxPos(), touchY - current.getyPos());
                     currentVector.x *= (screenWidth / 2.f);
