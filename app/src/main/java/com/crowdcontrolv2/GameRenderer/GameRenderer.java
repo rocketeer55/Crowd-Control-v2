@@ -27,6 +27,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private TurntableRenderer leftTurntable;
     private TurntableRenderer rightTurntable;
 
+    private TurntableSpinIndicator leftTurntableSpinIndicator;
+    private TurntableSpinIndicator rightTurntableSpinIndicator;
+
     /**
      * Store the model matrix. This matrix is used to move models from object space (where each
      * model can be thought of being located at the center of the universe) to world space.
@@ -59,8 +62,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     /** This will be used to pass in texture coordinate information. */
     private int mTextureCoordinateHandle;
 
-    /** This is a handle for the simple program (used for dividers and notes) */
+    /** This is a handle for the simple program (used for turntable spin indicator) */
     private int mSimpleProgramHandle;
+
+    /** This is a handle for the simple program (used for dividers and notes) */
+    private int mSimpleLimitProgramHandle;
 
     /** This is a handle for the turntable program */
     private int mTurntableProgramHandle;
@@ -99,19 +105,29 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         dividers[5] = new LaneDivider(3f, 2f, -5f, 0.05f, 5f, 0.05f);
         dividers[6] = new LaneDivider(4.25f, 2f, -5f, 0.05f, 5f, 0.05f);
         dividers[7] = new LaneDivider(5.5f, 2f, -5f, 0.05f, 5f, 0.05f);
+
+        leftTurntableSpinIndicator = new TurntableSpinIndicator(-3.6f, -2.3f, -5f, 0.6f, 0.15f, 0.05f);
+        rightTurntableSpinIndicator = new TurntableSpinIndicator(3.6f, -2.3f, -5f, 0.6f, 0.15f, 0.05f);
     }
 
     public void setLeftTurntable(TurntableController turntable) {
         this.leftTurntable = new TurntableRenderer(turntable);
+        this.leftTurntableSpinIndicator.setController(turntable);
     }
 
     public void setRightTurntable(TurntableController turntable) {
         this.rightTurntable = new TurntableRenderer(turntable);
+        this.rightTurntableSpinIndicator.setController(turntable);
+    }
+
+    protected String getSimpleVertexShaderLimit()
+    {
+        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_vertex_shader_limit);
     }
 
     protected String getSimpleVertexShader()
     {
-        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_vertex_shader_limit);
+        return RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.simple_vertex_shader);
     }
 
     protected String getSimpleFragmentShader()
@@ -157,12 +173,28 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         // Set the view matrix. This matrix can be said to represent the camera position.
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
+        // Set up simple program with vertical limit
+        initSimpleProgramLimit();
+
         // Set up simple program
         initSimpleProgram();
 
         // Set up turntable program
         initTurntableProgram();
 
+    }
+
+    private void initSimpleProgramLimit() {
+        final String vertexShader = getSimpleVertexShaderLimit();
+        final String fragmentShader = getSimpleFragmentShader();
+
+        // Load in the vertex shader.
+        final int vertexShaderHandle = ShaderHelper.compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
+        final int fragmentShaderHandle = ShaderHelper.compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
+
+        // Create a program object and store the handle to it
+        mSimpleLimitProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
+                new String[] {"a_Position",  "a_Color"});
     }
 
     private void initSimpleProgram() {
@@ -211,6 +243,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         leftTurntable.setRatio(ratio);
         rightTurntable.setRatio(ratio);
 
+        leftTurntableSpinIndicator.setRatio(ratio);
+        rightTurntableSpinIndicator.setRatio(ratio);
+
         Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
     }
 
@@ -239,10 +274,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         drawTurntable(leftTurntable);
         drawTurntable(rightTurntable);
+
+        drawTurntableSpinIndicator(leftTurntableSpinIndicator);
+        drawTurntableSpinIndicator(rightTurntableSpinIndicator);
     }
 
     private void drawDivider(final LaneDivider divider) {
-        GLES20.glUseProgram(mSimpleProgramHandle);
+        GLES20.glUseProgram(mSimpleLimitProgramHandle);
 
         FloatBuffer positions = divider.getPositionFloatBuffer();
         FloatBuffer colors = divider.getColorFloatBuffer();
@@ -276,8 +314,43 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
     }
 
-    private void drawNote(final Note note) {
+    private void drawTurntableSpinIndicator(final TurntableSpinIndicator indicator) {
         GLES20.glUseProgram(mSimpleProgramHandle);
+
+        FloatBuffer positions = indicator.getPositionFloatBuffer();
+        FloatBuffer colors = indicator.getColorFloatBuffer();
+        indicator.setRatio(ratio);
+        mModelMatrix = indicator.getModelMatrix(mModelMatrix);
+
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mSimpleProgramHandle, "u_MVPMatrix");
+        mPositionHandle = GLES20.glGetAttribLocation(mSimpleProgramHandle, "a_Position");
+        mColorHandle = GLES20.glGetAttribLocation(mSimpleProgramHandle, "a_Color");
+
+        GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
+                0, positions);
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        GLES20.glVertexAttribPointer(mColorHandle, mColorDataSize, GLES20.GL_FLOAT, false,
+                0, colors);
+        GLES20.glEnableVertexAttribArray(mColorHandle);
+
+        // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
+        // (which currently contains model * view).
+        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+
+        // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
+        // (which now contains model * view * projection).
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+
+        // Pass in the combined matrix.
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
+
+        // Draw the cube.
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    private void drawNote(final Note note) {
+        GLES20.glUseProgram(mSimpleLimitProgramHandle);
 
         FloatBuffer positions = note.getPositionFloatBuffer();
         FloatBuffer colors = note.getColorFloatBuffer();
