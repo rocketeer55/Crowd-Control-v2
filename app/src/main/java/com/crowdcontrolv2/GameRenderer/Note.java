@@ -34,6 +34,10 @@ public abstract class Note {
     //Brad Stuff
     public int measure;
     public BeatMap.NOTE_LENGTH noteLength;
+    public float songPosTarget;
+    public float songPosStart;
+    public float relativePosition;
+
 
     public FloatBuffer getPositionFloatBuffer() {
         return cubePositions;
@@ -51,7 +55,7 @@ public abstract class Note {
         this.ratio = ratio;
     }
 
-    public abstract void updatePosition(int deltaTime);
+    public abstract void updatePosition(int deltaTime, float songPosition);
 
     public float[] getModelMatrix(float[] modelMatrix) {
         Matrix.setIdentityM(modelMatrix, 0);
@@ -62,5 +66,11 @@ public abstract class Note {
         Matrix.scaleM(modelMatrix, 0, width, height, depth);
 
         return modelMatrix;
+    }
+
+    public void setTarget(float songPosStart, float songPosTarget)
+    {
+        this.songPosStart = songPosStart;
+        this.songPosTarget = songPosTarget;
     }
 }

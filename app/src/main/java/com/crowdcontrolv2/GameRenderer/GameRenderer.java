@@ -18,6 +18,9 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
 
+import MusicHandler.MusicThread;
+import MusicHandler.Sequencer;
+
 public class GameRenderer implements GLSurfaceView.Renderer {
     private Context mActivityContext;
 
@@ -90,6 +93,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private long lastTime = System.nanoTime();
 
     private float songPos;
+    private MusicThread musicThread;
 
     /**
      * Initialize the model data.
@@ -182,6 +186,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         // Set up turntable program
         initTurntableProgram();
 
+
+
     }
 
     private void initSimpleProgramLimit() {
@@ -225,6 +231,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         mTextureDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.vinyl);
     }
 
+    private void initMusic()
+    {
+
+    }
+
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         // Set the OpenGL viewport to the same size as the surface.
@@ -252,7 +263,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused) {
         // TODO :: Remove this later
-        randomlyGenerate();
+        //prandomlyGenerate();
 
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
@@ -265,7 +276,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
 
         for (Note n : notes) {
-            n.updatePosition(deltaTime);
+            n.updatePosition(deltaTime, songPos);
             drawNote(n);
         }
 

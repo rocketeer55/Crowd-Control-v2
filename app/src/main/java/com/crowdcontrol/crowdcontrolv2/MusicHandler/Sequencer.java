@@ -146,7 +146,8 @@ public class Sequencer
             lastBeatLength = lengthToFloat(currentNote.noteLength);
 
             //playLevel.spawnArrow(currentNote.arrowDirection, songPosition, (songPosition + lengthOfMeasure));
-
+            System.out.println("Adding note");
+            currentNote.setTarget(songPosition, (songPosition + lengthOfMeasure));
             gameRenderer.addNote(currentNote);
             currentNote = beatMap.dequeue();
 

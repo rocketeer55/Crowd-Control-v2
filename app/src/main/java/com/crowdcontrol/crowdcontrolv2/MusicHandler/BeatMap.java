@@ -65,6 +65,59 @@ public class BeatMap
         // Default constructor
     }
 
+    private float noteLengthToFloat(NOTE_LENGTH length)
+    {
+        float returnVal;
+
+        switch(length)
+        {
+            case WHOLE: returnVal = 4.0f / beatsPerMeasure;
+                break;
+            case HALF: returnVal = 2.0f / beatsPerMeasure;
+                break;
+            case QUARTER: returnVal = 1.0f / beatsPerMeasure;
+                break;
+            case EIGHTH: returnVal = (0.5f) / beatsPerMeasure;
+                break;
+            case SIXTEENTH: returnVal = (0.25f) / beatsPerMeasure;
+                break;
+            case DOTTED_WHOLE: returnVal = 6.0f / beatsPerMeasure;
+                break;
+            case DOTTED_HALF: returnVal = 3.0f / beatsPerMeasure;
+                break;
+            case DOTTED_QUARTER: returnVal = 1.5f / beatsPerMeasure;
+                break;
+            case DOTTED_EIGHTH: returnVal = 0.75f / beatsPerMeasure;
+                break;
+            case DOTTED_SIXTEENTH: returnVal = (0.25f + 0.25f/2.0f) / beatsPerMeasure;
+                break;
+            case QUARTER_TIE_SIXTEENTH: returnVal = 1.25f / beatsPerMeasure;
+                break;
+            case QUARTER_TIE_DOTTED_EIGHTH: returnVal = 1.75f / beatsPerMeasure;
+                break;
+            case HALF_TIE_SIXTEENTH: returnVal = 2.25f / beatsPerMeasure;
+                break;
+            case DOTTED_WHOLE_TIE_EIGHTH: returnVal = 6.5f /beatsPerMeasure;
+                break;
+            case WHOLE_TIE_EIGHTH: returnVal = 4.5f / beatsPerMeasure;
+                break;
+            case DOTTED_HALF_TIE_EIGHTH: returnVal = 3.5f / beatsPerMeasure;
+                break;
+            case HALF_TIE_EIGHTH: returnVal = 2.5f / beatsPerMeasure;
+                break;
+            case QUARTER_TRIPLET: returnVal = (2.0f/3.0f) / beatsPerMeasure ;
+                break;
+            case EIGHTH_TRIPLET: returnVal = (1.0f/3.0f) / beatsPerMeasure;
+                break;
+            case SIXTEENTH_TRIPLET: returnVal = (1.0f/6.0f) / beatsPerMeasure;
+                break;
+            default: returnVal = 1.0f;
+                break;
+        }
+
+        return returnVal;
+    }
+
     NOTE_LENGTH stringToNoteLength(String string)
     {
         NOTE_LENGTH returnVal;
@@ -148,19 +201,19 @@ public class BeatMap
         Note returnVal;
         switch(pos)
         {
-            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, 2);
+            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, noteLengthToFloat(length));
                 break;
-            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(35, 2);
+            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(35, noteLengthToFloat(length));
                 break;
-            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(35, 2);
+            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(35, noteLengthToFloat(length));
                 break;
-            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(35, 2);
+            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(35, noteLengthToFloat(length));
                 break;
-            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(35, 2);
+            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(35, noteLengthToFloat(length));
                 break;
-            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(35, 2);
+            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(35, noteLengthToFloat(length));
                 break;
-            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, 2);
+            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, noteLengthToFloat(length));
                 break;
         }
 

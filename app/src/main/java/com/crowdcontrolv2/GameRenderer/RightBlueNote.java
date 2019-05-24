@@ -139,8 +139,9 @@ public class RightBlueNote extends Note {
         cubeColors.put(cubeColorData).position(0);
     }
 
-    public void updatePosition(int deltaTime) {
+    public void updatePosition(int deltaTime, float songPos) {
         this.yPos -= (deltaTime / 10000f) * speed;
+        this.relativePosition = (songPosTarget - songPos) / (songPosTarget - songPosStart);
     }
 
 }
