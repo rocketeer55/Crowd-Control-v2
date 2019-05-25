@@ -90,7 +90,7 @@ public class Sequencer
     {
         float returnVal;
 
-        System.out.println(noteLength);
+        //System.out.println(noteLength);
         switch(noteLength)
         {
             case WHOLE: returnVal = (4 * quarterNote);
@@ -147,7 +147,7 @@ public class Sequencer
             currentBar = currentNote.measure;
             //currentSyllable = dirToString(currentNote.arrowDirection);
             lastBeat += lastBeatLength;
-            System.out.println("Adding note: " + currentNote);
+            //System.out.println("Adding note: " + currentNote);
             lastBeatLength = lengthToFloat(currentNote.noteLength);
 
             //playLevel.spawnArrow(currentNote.arrowDirection, songPosition, (songPosition + lengthOfMeasure));

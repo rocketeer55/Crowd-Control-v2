@@ -46,10 +46,10 @@ public class MusicThread implements Runnable
 
             for (Note n : notes) {
                 n.updatePosition(musicPlayer.getCurrentPosition());
-                if(n.getBarNo() == 1)
-                {
-                    System.out.println("POSITION IS: " + n.getRelativePosition() + "LENGTH IS: " + n.getLength());
-                }
+//                if(n.getBarNo() == 1)
+//                {
+//                    System.out.println("POSITION IS: " + n.getRelativePosition() + "LENGTH IS: " + n.getLength());
+//                }
             }
 
             //Used for testing/debug
@@ -69,7 +69,7 @@ public class MusicThread implements Runnable
 
     public void addNote(com.crowdcontrolv2.GameRenderer.Note n)
     {
-        System.out.println("ADDING NOTE: " + n);
+        //System.out.println("ADDING NOTE: " + n);
         LinkedList<Note> newNotes = new LinkedList<>(notes);
         newNotes.add(n);
         notes = newNotes;

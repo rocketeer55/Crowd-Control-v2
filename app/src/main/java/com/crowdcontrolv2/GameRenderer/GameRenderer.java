@@ -267,6 +267,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         // TODO :: Remove this later
         //prandomlyGenerate();
 
+
+        //Grab snapshot from Model (Music Thread)
+        musicThread.getSnapshot();
+
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         long time = System.nanoTime();
