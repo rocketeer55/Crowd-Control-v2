@@ -112,8 +112,17 @@ public class LeftRedNote extends Note {
 
     protected float speed;
 
-    public LeftRedNote(float speed, float length) {
+    private int barNo;
+
+    public Note.POSITION getColor()
+    {
+        return POSITION.LEFT_RED;
+    }
+
+    public LeftRedNote(int barNo, float speed, float length) {
         this.speed = speed;
+
+        this.barNo = barNo;
 
         this.xPos = -2.375f;
         this.yPos = 15f;
@@ -139,9 +148,22 @@ public class LeftRedNote extends Note {
         cubeColors.put(cubeColorData).position(0);
     }
 
-    public void updatePosition(int deltaTime, float songPos) {
-        this.yPos -= (deltaTime / 10000f) * speed;
+    public void updatePosition(float songPos) {
         this.relativePosition = (songPosTarget - songPos) / (songPosTarget - songPosStart);
     }
 
+    public int getBarNo()
+    {
+        return barNo;
+    }
+
+    public float getRelativePosition()
+    {
+        return relativePosition;
+    }
+
+    public float getLength()
+    {
+        return height;
+    }
 }

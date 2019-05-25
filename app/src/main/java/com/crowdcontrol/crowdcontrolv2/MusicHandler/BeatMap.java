@@ -196,24 +196,24 @@ public class BeatMap
         return returnVal;
     }
 
-    public Note generateNote(Note.POSITION pos, NOTE_LENGTH length)
+    public Note generateNote(Note.POSITION pos, NOTE_LENGTH length, int barNo)
     {
         Note returnVal;
         switch(pos)
         {
-            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, noteLengthToFloat(length));
+            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(barNo, 35, noteLengthToFloat(length));
                 break;
-            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(35, noteLengthToFloat(length));
+            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(barNo, 35, noteLengthToFloat(length));
                 break;
-            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(35, noteLengthToFloat(length));
+            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(barNo, 35, noteLengthToFloat(length));
                 break;
-            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(35, noteLengthToFloat(length));
+            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(barNo, 35, noteLengthToFloat(length));
                 break;
-            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(35, noteLengthToFloat(length));
+            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(barNo, 35, noteLengthToFloat(length));
                 break;
-            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(35, noteLengthToFloat(length));
+            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(barNo, 35, noteLengthToFloat(length));
                 break;
-            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(35, noteLengthToFloat(length));
+            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(barNo, 35, noteLengthToFloat(length));
                 break;
         }
 
@@ -245,7 +245,8 @@ public class BeatMap
                 Note.POSITION tempNotePos = stringToNotePos(lineScanner.next());
 
                 //Note tempNote = new Note(tempBarNo, tempNoteLength, tempArrowDir);
-                Note tempNote = generateNote(tempNotePos, tempNoteLength);
+                Note tempNote = generateNote(tempNotePos, tempNoteLength, tempBarNo);
+                tempNote.noteLength = tempNoteLength;
                 Node tempNode = new Node(tempNote);
 
                 enqueue(tempNode);

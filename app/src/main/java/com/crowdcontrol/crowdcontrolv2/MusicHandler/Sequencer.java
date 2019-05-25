@@ -25,7 +25,9 @@ public class Sequencer
 
     //com.crowdcontrol.crowdcontrolv2.GameRenderer.GameGLSurfaceView playLevel;
 
-    com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer;
+    //com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer;
+
+    private MusicThread musicThread;
 
     public Sequencer(BeatMap beatMap) {
         this.beatMap = beatMap;
@@ -34,9 +36,10 @@ public class Sequencer
         offset = beatMap.offset * 1000;
     }
 
-    public Sequencer(BeatMap beatMap, com.crowdcontrolv2.GameRenderer.GameRenderer gameRenderer)
+    public Sequencer(BeatMap beatMap, MusicThread musicThread)
     {
-        this.gameRenderer = gameRenderer;
+        //this.gameRenderer = gameRenderer;
+        this.musicThread = musicThread;
         this.beatMap = beatMap;
         quarterNotesPerBar = beatMap.beatsPerMeasure;
         bpm = beatMap.bpm;
@@ -87,6 +90,7 @@ public class Sequencer
     {
         float returnVal;
 
+        System.out.println(noteLength);
         switch(noteLength)
         {
             case WHOLE: returnVal = (4 * quarterNote);
@@ -143,12 +147,13 @@ public class Sequencer
             currentBar = currentNote.measure;
             //currentSyllable = dirToString(currentNote.arrowDirection);
             lastBeat += lastBeatLength;
+            System.out.println("Adding note: " + currentNote);
             lastBeatLength = lengthToFloat(currentNote.noteLength);
 
             //playLevel.spawnArrow(currentNote.arrowDirection, songPosition, (songPosition + lengthOfMeasure));
-            System.out.println("Adding note");
             currentNote.setTarget(songPosition, (songPosition + lengthOfMeasure));
-            gameRenderer.addNote(currentNote);
+            //gameRenderer.addNote(currentNote);
+            musicThread.addNote(currentNote);
             currentNote = beatMap.dequeue();
 
             triggerTime = lastBeatLength + lastBeat;

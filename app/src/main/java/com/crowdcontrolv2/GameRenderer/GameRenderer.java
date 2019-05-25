@@ -18,6 +18,7 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
 
+import MusicHandler.BeatMap;
 import MusicHandler.MusicThread;
 import MusicHandler.Sequencer;
 
@@ -186,8 +187,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         // Set up turntable program
         initTurntableProgram();
 
-
-
+        initMusic();
     }
 
     private void initSimpleProgramLimit() {
@@ -233,7 +233,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private void initMusic()
     {
-
+        musicThread = new MusicThread(R.raw.thethrillwithprep, new BeatMap(R.raw.thethrillbeatmapedited, mActivityContext),
+                this, mActivityContext);
+        musicThread.start();
     }
 
     @Override
@@ -276,7 +278,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
 
         for (Note n : notes) {
-            n.updatePosition(deltaTime, songPos);
+            //n.updatePosition(deltaTime, songPos);
+
+            //Maybe here would be where you would grab the snapshot
             drawNote(n);
         }
 
@@ -439,37 +443,37 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
     }
 
-    private void randomlyGenerate() {
-        Random r = new Random();
-        int i;
-        if ((i = r.nextInt(200)) < 6) {
-            switch(i) {
-                case 0:
-                    notes.add(new LeftYellowNote(35, r.nextInt(2) + 1));
-                    break;
-                case 1:
-                    notes.add(new LeftBlueNote(35, r.nextInt(2) + 1));
-                    break;
-                case 2:
-                    notes.add(new LeftRedNote(35, r.nextInt(2) + 1));
-                    break;
-                case 3:
-                    notes.add(new RightRedNote(35, r.nextInt(2) + 1));
-                    break;
-                case 4:
-                    notes.add(new RightBlueNote(35, r.nextInt(2) + 1));
-                    break;
-                case 5:
-                    notes.add(new RightYellowNote(35, r.nextInt(2) + 1));
-                    break;
-            }
-        }
-    }
+//    private void randomlyGenerate() {
+//        Random r = new Random();
+//        int i;
+//        if ((i = r.nextInt(200)) < 6) {
+//            switch(i) {
+//                case 0:
+//                    notes.add(new LeftYellowNote(35, r.nextInt(2) + 1));
+//                    break;
+//                case 1:
+//                    notes.add(new LeftBlueNote(35, r.nextInt(2) + 1));
+//                    break;
+//                case 2:
+//                    notes.add(new LeftRedNote(35, r.nextInt(2) + 1));
+//                    break;
+//                case 3:
+//                    notes.add(new RightRedNote(35, r.nextInt(2) + 1));
+//                    break;
+//                case 4:
+//                    notes.add(new RightBlueNote(35, r.nextInt(2) + 1));
+//                    break;
+//                case 5:
+//                    notes.add(new RightYellowNote(35, r.nextInt(2) + 1));
+//                    break;
+//            }
+//        }
+//    }
 
-    public void addNote(com.crowdcontrolv2.GameRenderer.Note n)
-    {
-        notes.add(n);
-    }
+//    public void addNote(com.crowdcontrolv2.GameRenderer.Note n)
+//    {
+//        notes.add(n);
+//    }
 
     public void setSongPos(float pos)
     {
