@@ -18,9 +18,9 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
 
-import MusicHandler.BeatMap;
-import MusicHandler.MusicThread;
-import MusicHandler.Sequencer;
+import com.crowdcontrolv2.MusicHandler.BeatMap;
+import com.crowdcontrolv2.MusicHandler.MusicThread;
+import com.crowdcontrolv2.MusicHandler.Sequencer;
 
 public class GameRenderer implements GLSurfaceView.Renderer {
     private Context mActivityContext;

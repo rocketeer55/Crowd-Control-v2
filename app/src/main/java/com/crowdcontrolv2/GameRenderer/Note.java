@@ -4,7 +4,7 @@ import android.opengl.Matrix;
 
 import java.nio.FloatBuffer;
 
-import MusicHandler.BeatMap;
+import com.crowdcontrolv2.MusicHandler.BeatMap;
 
 public abstract class Note {
 
