@@ -201,19 +201,19 @@ public class BeatMap
         Note returnVal;
         switch(pos)
         {
-            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(barNo, 35, noteLengthToFloat(length));
+            case LEFT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(barNo, noteLengthToFloat(length));
                 break;
-            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(barNo, 35, noteLengthToFloat(length));
+            case RIGHT_BLUE: returnVal = new com.crowdcontrolv2.GameRenderer.RightBlueNote(barNo, noteLengthToFloat(length));
                 break;
-            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(barNo, 35, noteLengthToFloat(length));
+            case LEFT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.LeftYellowNote(barNo, noteLengthToFloat(length));
                 break;
-            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(barNo, 35, noteLengthToFloat(length));
+            case RIGHT_YELLOW: returnVal = new com.crowdcontrolv2.GameRenderer.RightYellowNote(barNo, noteLengthToFloat(length));
                 break;
-            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(barNo, 35, noteLengthToFloat(length));
+            case LEFT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.LeftRedNote(barNo, noteLengthToFloat(length));
                 break;
-            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(barNo, 35, noteLengthToFloat(length));
+            case RIGHT_RED: returnVal = new com.crowdcontrolv2.GameRenderer.RightRedNote(barNo, noteLengthToFloat(length));
                 break;
-            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(barNo, 35, noteLengthToFloat(length));
+            default: returnVal = new com.crowdcontrolv2.GameRenderer.LeftBlueNote(barNo, noteLengthToFloat(length));
                 break;
         }
 

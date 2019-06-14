@@ -109,9 +109,6 @@ public class LeftYellowNote extends Note {
             0f, 0f, 0f, 1f,
             0f, 0f, 0f, 1f
     };
-
-    protected float speed;
-
     private int barNo;
 
     public Note.POSITION getColor()
@@ -119,9 +116,7 @@ public class LeftYellowNote extends Note {
         return POSITION.LEFT_YELLOW;
     }
 
-    public LeftYellowNote(int barNo, float speed, float length) {
-        this.speed = speed;
-
+    public LeftYellowNote(int barNo, float length) {
         this.barNo = barNo;
 
         this.xPos = -4.875f;
@@ -129,7 +124,7 @@ public class LeftYellowNote extends Note {
         this.zPos = -5f;
 
         this.width = 0.5f;
-        this.height = length;
+        this.height = length * 4.22f;
         this.depth = 0.05f;
 
         this.angle = 0;

@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.crowdcontrolv2.Controllers.TurntableController;
+import com.crowdcontrolv2.MusicHandler.Snapshot;
 import com.crowdcontrolv2.R;
 import com.crowdcontrolv2.Common.RawResourceReader;
 import com.crowdcontrolv2.Common.ShaderHelper;
@@ -26,7 +27,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private Context mActivityContext;
 
     private LaneDivider[] dividers = new LaneDivider[8];
-    private LinkedList<Note> notes = new LinkedList<>();
 
     private TurntableRenderer leftTurntable;
     private TurntableRenderer rightTurntable;
@@ -264,28 +264,21 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        // TODO :: Remove this later
-        //prandomlyGenerate();
-
-
         //Grab snapshot from Model (Music Thread)
-        musicThread.getSnapshot();
+        Snapshot snapshot = musicThread.getSnapshot();
+        LinkedList<Note> notes = snapshot.getNotes();
+        //LinkedList<Note> notes = new LinkedList<>();
+        //notes.add(new LeftBlueNote(1, 0.5f));
 
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-
-        long time = System.nanoTime();
-        int deltaTime = (int) ((time - lastTime) / 1000000); // In milliseconds
-        lastTime = time;
 
         for (LaneDivider d : dividers) {
             drawDivider(d);
         }
 
         for (Note n : notes) {
-            //n.updatePosition(deltaTime, songPos);
-
-            //Maybe here would be where you would grab the snapshot
             drawNote(n);
+            System.out.println(n.relativePosition);
         }
 
         leftTurntable.update();

@@ -110,8 +110,6 @@ public class RightYellowNote extends Note {
             0f, 0f, 0f, 1f
     };
 
-    protected float speed;
-
     private int barNo;
 
     public Note.POSITION getColor()
@@ -119,9 +117,7 @@ public class RightYellowNote extends Note {
         return POSITION.RIGHT_YELLOW;
     }
 
-    public RightYellowNote(int barNo, float speed, float length) {
-        this.speed = speed;
-
+    public RightYellowNote(int barNo, float length) {
         this.barNo = barNo;
 
         this.xPos = 4.875f;
@@ -129,7 +125,7 @@ public class RightYellowNote extends Note {
         this.zPos = -5f;
 
         this.width = 0.5f;
-        this.height = length;
+        this.height = length * 4.22f;
         this.depth = 0.05f;
 
         this.angle = 0;

@@ -29,8 +29,6 @@ public abstract class Note {
     protected float angle;
     protected float ratio;
 
-    protected float speed;
-
     //Brad Stuff
     public int measure;
     public BeatMap.NOTE_LENGTH noteLength;
@@ -64,7 +62,7 @@ public abstract class Note {
         Matrix.scaleM(modelMatrix, 0, ratio, 1, 1);
 
         Matrix.rotateM(modelMatrix, 0, angle, 1f, 0f, 0f);
-        Matrix.translateM(modelMatrix, 0, xPos, yPos, zPos);
+        Matrix.translateM(modelMatrix, 0, xPos, relativePosition * 8.55f - 2f + height, zPos);
         Matrix.scaleM(modelMatrix, 0, width, height, depth);
 
         return modelMatrix;
